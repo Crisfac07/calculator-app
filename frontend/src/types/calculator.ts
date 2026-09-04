@@ -23,3 +23,13 @@ export interface CalculatorError {
 export interface CalculatorErrorResponse {
   error: CalculatorError
 }
+
+export type CalculatorToken =
+  | {
+      type: 'number'
+      value: string
+    }
+  | {
+      type: 'operation'
+      value: CalculatorOperation
+    }
