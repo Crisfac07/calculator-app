@@ -1,0 +1,39 @@
+# Go
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go coverage
+coverage.out
+coverage.html
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Dependencies
+vendor/
+
+# Node
+node_modules/
+dist/
+
+# React/Vite
+.vite/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+*.iml
