@@ -183,3 +183,44 @@ func TestHandler_InvalidOperations(t *testing.T) {
 		})
 	}
 }
+
+func TestHandler_MethodNotAllowed(t *testing.T) {
+	handler := NewHandler(fakeCalculator{})
+
+	request := httptest.NewRequest(
+		http.MethodGet,
+		"/api/v1/calculator",
+		nil,
+	)
+
+	recorder := httptest.NewRecorder()
+
+	handler.Calculate(recorder, request)
+
+	if recorder.Code != http.StatusMethodNotAllowed {
+		t.Errorf(
+			"expected status 405, got %d",
+			recorder.Code,
+		)
+	}
+
+	if allow := recorder.Header().Get("Allow"); allow != http.MethodPost {
+		t.Errorf(
+			"expected Allow header POST, got %s",
+			allow,
+		)
+	}
+
+	var response ErrorResponse
+
+	if err := json.NewDecoder(recorder.Body).Decode(&response); err != nil {
+		t.Fatalf("failed to decode response: %v", err)
+	}
+
+	if response.Error.Code != "METHOD_NOT_ALLOWED" {
+		t.Errorf(
+			"expected error code METHOD_NOT_ALLOWED, got %s",
+			response.Error.Code,
+		)
+	}
+}

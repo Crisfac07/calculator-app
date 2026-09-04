@@ -24,6 +24,19 @@ func NewHandler(calculator Calculator) *Handler {
 }
 
 func (h *Handler) Calculate(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		w.Header().Set("Allow", http.MethodPost)
+
+		writeError(
+			w,
+			http.StatusMethodNotAllowed,
+			"METHOD_NOT_ALLOWED",
+			"method not allowed",
+		)
+
+		return
+	}
+
 	var request CalculateRequest
 
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
