@@ -148,6 +148,11 @@ const handleCalculate = async () => {
   }
 }
 
+const handleClear = () => {
+  setCurrentInput('')
+  setTokens([])
+}
+
   const numberButtons = [
     '7', '8', '9',
     '4', '5', '6',
@@ -227,7 +232,7 @@ const handleCalculate = async () => {
             <CalculatorButton
               label="C"
               variant="danger"
-              onClick={() => console.log('Clear')}
+              onClick={handleClear}
             />
           </div>
 
