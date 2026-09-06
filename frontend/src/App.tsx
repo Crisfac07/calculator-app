@@ -6,9 +6,6 @@ function App() {
     <main className="container py-5">
       <header className="mb-4">
         <h1 className="fw-bold">Calculator App</h1>
-        <p className="text-secondary mb-0">
-          Simple. Fast. Reliable.
-        </p>
       </header>
 
       <div className="row g-4">
@@ -22,10 +19,17 @@ function App() {
               <h2 className="h4">How to use</h2>
 
               <ol className="mt-3">
+                <li>Enter a number.</li>
                 <li>Select an operation.</li>
-                <li>Enter the required numbers.</li>
-                <li>Press calculate.</li>
+                <li>Enter the required number(s).</li>
+                <li>Repeat the operation if needed.</li>
+                <li>Press = to calculate.</li>
+                <li>Press C to clear the current calculation.</li>
               </ol>
+              <h3 className="h6 mt-4">Example</h3>
+              <ul className="mb-0">
+                <li>2 × 3 + 4 =</li>
+              </ul>
 
               <h3 className="h6 mt-4">Supported operations</h3>
 
