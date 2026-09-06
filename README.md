@@ -85,6 +85,37 @@ http://localhost:5173
 
 The frontend development server proxies `/api` requests to the Go backend.
 
+
+## Docker
+
+The application can be run locally using Docker Compose.
+
+From the project root:
+
+```bash
+docker compose up --build
+```
+
+The application will be available at:
+
+```text
+http://localhost:5173
+```
+
+Docker Compose runs two services:
+
+- **Frontend:** React application served by Nginx.
+- **Backend:** Go REST API.
+
+Nginx serves the frontend and proxies `/api` requests to the Go backend through the Docker network.
+
+To stop the containers:
+
+```bash
+docker compose down
+```
+
+
 ## API
 
 ### Calculate
