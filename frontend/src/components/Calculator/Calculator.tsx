@@ -3,6 +3,7 @@ import type { CalculatorOperation, CalculatorToken } from '../../types/calculato
 import { evaluateExpression } from '../../services/expressionEvaluator'
 import CalculatorButton from './CalculatorButton'
 import CalculatorDisplay from './CalculatorDisplay'
+import { CalculatorApiError } from '../../services/calculator'
 
 function formatToken(token: CalculatorToken): string {
   if (token.type === 'number') {
@@ -142,9 +143,15 @@ const handleCalculate = async () => {
 
     setCurrentInput(String(result))
     setTokens([])
-  } catch {
-    setCurrentInput('Error')
-    setTokens([])
+  } catch (error) {
+  setTokens([])
+
+  if (error instanceof CalculatorApiError) {
+    setCurrentInput(error.message)
+    return
+  }
+
+  setCurrentInput('Unexpected error')
   }
 }
 

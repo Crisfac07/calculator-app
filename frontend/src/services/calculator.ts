@@ -4,6 +4,16 @@ import type {
   CalculatorResponse,
 } from '../types/calculator'
 
+export class CalculatorApiError extends Error {
+  code: string
+
+  constructor(code: string, message: string) {
+    super(message)
+    this.name = 'CalculatorApiError'
+    this.code = code
+  }
+}
+
 export async function calculate(
   request: CalculatorRequest,
 ): Promise<CalculatorResponse> {
@@ -15,10 +25,14 @@ export async function calculate(
     body: JSON.stringify(request),
   })
 
-  if (!response.ok) {
-    const error: CalculatorErrorResponse = await response.json()
-    throw new Error(error.error.message)
-  }
+if (!response.ok) {
+  const error: CalculatorErrorResponse = await response.json()
+
+  throw new CalculatorApiError(
+    error.error.code,
+    error.error.message,
+  )
+}
 
   return response.json()
 }
