@@ -115,6 +115,12 @@ To stop the containers:
 docker compose down
 ```
 
+## Live Demo
+
+The application is deployed on Azure Container Apps.
+
+[Open the live application](http://calculator-frontend.ambitioussea-66661120.mexicocentral.azurecontainerapps.io)
+
 
 ## API
 
@@ -169,6 +175,17 @@ Errors use the following format:
 Invalid operations or operands return `400 Bad Request`.
 
 Unsupported HTTP methods return `405 Method Not Allowed`.
+
+### Validation
+
+The API validates:
+
+- Supported operations
+- Required number of operands for each operation
+- Division by zero
+- Negative values for square root
+- Invalid HTTP methods
+- Invalid JSON request bodies
 
 ## Design Decisions
 
@@ -236,3 +253,31 @@ npm run build
 ```
 
 The tests cover the calculator operations, expression evaluation, operator precedence, and error propagation.
+
+## Test Coverage
+
+Backend statement coverage:
+
+- API layer: 94.4%
+- Calculator layer: 100%
+- Operations: 100%
+- Overall backend coverage: 65.4%
+
+The overall percentage includes `cmd/api/main.go`, which contains
+application startup and dependency wiring rather than calculator
+business logic.
+
+The backend coverage profile is included in `backend/coverage`.
+
+To regenerate the coverage profile:
+
+```bash
+cd backend
+go test ./... -coverprofile=coverage
+```
+
+The detailed coverage information can be inspected with:
+
+```bash
+go tool cover -func=coverage
+```
