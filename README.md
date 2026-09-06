@@ -24,19 +24,25 @@ calculator-app/
 │   ├── cmd/
 │   │   └── api/
 │   └── internal/
+│       ├── api/
+│       │   └── calculator/
 │       └── calculator/
+│           └── operations/
 ├── frontend/
 │   └── src/
 │       ├── components/
+│       │   └── Calculator/
 │       ├── services/
 │       └── types/
 ├── .gitignore
 └── README.md
 ```
 
-The frontend is responsible for the UI, user input, expression evaluation, and communication with the backend.
+## How It Works
 
-The backend exposes the REST API and contains the calculator business logic and validation.
+The frontend handles user input and expression evaluation, including operator precedence.
+
+The frontend communicates with the Go backend through a REST API. The backend validates the requested operation and operands, executes the corresponding calculator operation, and returns either the result or a structured error response.
 
 ## Getting Started
 
@@ -63,7 +69,7 @@ http://localhost:8080
 
 ### Frontend
 
-Open a second terminal:
+Open a second terminal from the project root::
 
 ```bash
 cd frontend
@@ -82,6 +88,7 @@ The frontend development server proxies `/api` requests to the Go backend.
 ## API
 
 ### Calculate
+Calculates the result of the requested operation using the provided operands.
 
 ```http
 POST /api/v1/calculator
@@ -130,15 +137,42 @@ Errors use the following format:
 
 Invalid operations or operands return `400 Bad Request`.
 
+Unsupported HTTP methods return `405 Method Not Allowed`.
+
 ## Design Decisions
 
-I kept the architecture simple because the application does not require a database, authentication, or other additional infrastructure.
+### Backend
 
-The backend separates the HTTP layer from the calculator business logic. Each operation implements a common interface, which makes the operations easier to test and extend.
+The backend uses a simple layered structure that separates HTTP concerns from calculator business logic.
 
-On the frontend, components handle the UI, the API service handles backend communication, and the expression evaluator handles operator precedence.
+- The API layer handles HTTP requests, JSON serialization, status codes, and error responses.
+- The calculator layer contains the business rules and validation.
+- Each calculator operation implements a common interface, making operations easier to test and extend.
 
-The calculator uses a single API endpoint because all operations follow the same request/response structure.
+The architecture intentionally avoids additional layers such as repositories or database infrastructure because the application does not require persistence.
+
+### Frontend
+
+The frontend uses React with TypeScript.
+
+UI components are kept separate from backend communication, while the expression evaluator is isolated from the UI. This allows expression evaluation and operator precedence to be tested independently.
+
+### API Design
+
+The calculator uses a single REST endpoint because all supported operations share the same request and response structure.
+
+The backend is responsible for validating operations and operands so that business rules are not dependent on frontend behavior.
+
+### Error Handling
+
+The backend keeps calculator errors independent from HTTP concerns. The API layer maps those errors to structured JSON responses and appropriate HTTP status codes.
+
+This keeps the calculator business logic independent from the transport layer.
+
+### Scope
+
+The implementation intentionally avoids a database, authentication, or other infrastructure that is not required for the problem domain.
+
 
 ## Testing
 
@@ -154,6 +188,20 @@ Frontend:
 ```bash
 cd frontend
 npm run test
+```
+
+Frontend Lint:
+
+```bash
+cd frontend
+npm run lint
+```
+
+Frontend Production Build:
+
+```bash
+cd frontend
+npm run build
 ```
 
 The tests cover the calculator operations, expression evaluation, operator precedence, and error propagation.
